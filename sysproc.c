@@ -88,3 +88,8 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+//Turn of the computer
+int sys_halt(void){
+  outw (0xB004, 0x0 | 0x2000);
+  return 0;
+}
