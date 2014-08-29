@@ -109,4 +109,20 @@ int sys_getptable(void){
   if (argptr(1, &buf,size) <0){
     return -1;
   }
+  
+  s = buf;
+  p = getptable_proc();
+  
+  while(buf + size > s && p->state != UNUSED){
+    *(int *)s = p->state;
+    s+=4;
+    *(int *)s = p -> pid;
+    s+=4;
+    *(int *)s = p->parent->pid;
+    s+=4;
+    memmove(s,p->name,16);
+    s+=16;
+    p++;
+  }
+  return 0;
 }
