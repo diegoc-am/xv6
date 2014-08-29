@@ -93,3 +93,20 @@ int sys_halt(void){
   outw (0xB004, 0x0 | 0x2000);
   return 0;
 }
+
+//Processes || Copy elements from the kernel ptable to the user space
+extern struct proc * getptable_proc(void);
+
+int sys_getptable(void){
+  int size;
+  char *buf;
+  char *s;
+  struct proc *p = '\0';
+  
+  if (argint(0, &size) <0){
+    return -1;
+  }
+  if (argptr(1, &buf,size) <0){
+    return -1;
+  }
+}
