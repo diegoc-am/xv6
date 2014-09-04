@@ -165,8 +165,21 @@ main(void)
         printf(2, "cannot cd %s\n", buf+3);
       continue;
     }
-    if(fork1() == 0)
-      runcmd(parsecmd(buf));
+    if(fork1() == 0){
+      if (buf[0] == '\n'){
+        runcmd(parsecmd(buf));
+      }
+      else{
+        char p[sizeof(buf)+1];
+        p[0] = '/';
+        int i = 0;
+        while(buf[i]!='\0'){
+          p[i+1] = buf[i];
+          i++;
+        }  
+        runcmd(parsecmd(p));
+      }
+    }
     wait();
   }
   exit();
