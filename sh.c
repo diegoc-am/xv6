@@ -129,12 +129,11 @@ runcmd(struct cmd *cmd){
   exit();
 }
 
-char path[256];
 
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "diegoC@xv6:~%s$ ", path);
+  printf(2, "diegoC@xv6:~$ ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -145,7 +144,7 @@ getcmd(char *buf, int nbuf)
 int
 main(void){
   static char buf[100];
-  
+  char path[256];
   path[0] = '/';
   int lastPos = 1;
   int fd;
