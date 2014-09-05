@@ -55,8 +55,7 @@ struct cmd *parsecmd(char*);
 
 // Execute cmd.  Never returns.
 void
-runcmd(struct cmd *cmd)
-{
+runcmd(struct cmd *cmd){
   int p[2];
   struct backcmd *bcmd;
   struct execcmd *ecmd;
@@ -130,10 +129,11 @@ runcmd(struct cmd *cmd)
   exit();
 }
 
+
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "$ ");
+  printf(2, "diegoC@xv6:~$ ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
@@ -142,9 +142,11 @@ getcmd(char *buf, int nbuf)
 }
 
 int
-main(void)
-{
+main(void){
   static char buf[100];
+  char path[256];
+  path[0] = '/';
+  int lastPos = 1;
   int fd;
   
   // Assumes three file descriptors open.
@@ -161,12 +163,50 @@ main(void)
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
       buf[strlen(buf)-1] = 0;  // chop \n
-      if(chdir(buf+3) < 0)
+      if(chdir(buf+3) < 0){
         printf(2, "cannot cd %s\n", buf+3);
+      }
+      else{
+        if(buf[3] == '.' && buf[4] == '.'){
+          path[strlen(path)-1] = '\0';
+          while(path[lastPos] != '/'){
+            path[lastPos--] = '\0';
+          }
+        }
+        else{
+          int iter = 3;
+          while(buf[iter] != '\0'){
+            path[lastPos++] = buf[iter];
+            iter++;
+          }
+          path[lastPos] = '/';
+          lastPos++;
+          iter = 3;
+        }
+      }
       continue;
     }
-    if(fork1() == 0)
-      runcmd(parsecmd(buf));
+    else if(buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && (buf[3] == ' ' || buf[3]=='\n')){
+      //Get the directory to print it now
+      printf(2,"%s\n",path);
+
+
+    }
+    if(fork1() == 0 && !(buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && (buf[3] == ' ' || buf[3]=='\n'))){
+      if (buf[0] == '\n'){
+        runcmd(parsecmd(buf));
+      }
+      else{
+        char p[sizeof(buf)+1];
+        p[0] = '/';
+        int i = 0;
+        while(buf[i]!='\0'){
+          p[i+1] = buf[i];
+          i++;
+        }  
+        runcmd(parsecmd(p));
+      }
+    }
     wait();
   }
   exit();
