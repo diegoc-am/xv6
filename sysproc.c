@@ -123,6 +123,6 @@ int sys_getptable(void){
     memmove(s,p->name,16);
     s+=16;
     p++;
-  }
+  } 
   return 0;
 }

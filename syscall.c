@@ -128,8 +128,7 @@ static int (*syscalls[])(void) = {
 };
 
 void
-syscall(void)
-{
+syscall(void){
   int num;
 
   num = proc->tf->eax;
