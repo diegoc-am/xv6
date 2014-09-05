@@ -185,8 +185,6 @@ main(void){
           iter = 3;
         }
       }
-      
-      //printf(2,"%s\n", path);
       continue;
     }
     else if(buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && (buf[3] == ' ' || buf[3]=='\n')){
