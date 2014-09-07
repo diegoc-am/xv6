@@ -15,8 +15,7 @@
 
 // Fetch the int at addr from the current process.
 int
-fetchint(uint addr, int *ip)
-{
+fetchint(uint addr, int *ip){
   if(addr >= proc->sz || addr+4 > proc->sz)
     return -1;
   *ip = *(int*)(addr);
@@ -27,8 +26,7 @@ fetchint(uint addr, int *ip)
 // Doesn't actually copy the string - just sets *pp to point at it.
 // Returns length of string, not including nul.
 int
-fetchstr(uint addr, char **pp)
-{
+fetchstr(uint addr, char **pp){
   char *s, *ep;
 
   if(addr >= proc->sz)
@@ -43,8 +41,7 @@ fetchstr(uint addr, char **pp)
 
 // Fetch the nth 32-bit system call argument.
 int
-argint(int n, int *ip)
-{
+argint(int n, int *ip){
   return fetchint(proc->tf->esp + 4 + 4*n, ip);
 }
 

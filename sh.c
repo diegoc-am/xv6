@@ -173,6 +173,14 @@ main(void){
             path[lastPos--] = '\0';
           }
         }
+        else if (buf[3] == '/' && (buf[4]==' ' || buf[4] == '\0')){
+          path[0] = '/';
+          int i;
+          for (i = 1; i < strlen(path); i++){
+            path[i] = 0;
+          }
+          lastPos = 1;
+        }
         else{
           int iter = 3;
           while(buf[iter] != '\0'){
@@ -189,8 +197,6 @@ main(void){
     else if(buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && (buf[3] == ' ' || buf[3]=='\n')){
       //Get the directory to print it now
       printf(2,"%s\n",path);
-
-
     }
     if(fork1() == 0 && !(buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && (buf[3] == ' ' || buf[3]=='\n'))){
       if (buf[0] == '\n'){
@@ -213,8 +219,7 @@ main(void){
 }
 
 void
-panic(char *s)
-{
+panic(char *s){
   printf(2, "%s\n", s);
   exit();
 }
@@ -234,8 +239,7 @@ fork1(void)
 // Constructors
 
 struct cmd*
-execcmd(void)
-{
+execcmd(void){
   struct execcmd *cmd;
 
   cmd = malloc(sizeof(*cmd));
@@ -245,8 +249,7 @@ execcmd(void)
 }
 
 struct cmd*
-redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int fd)
-{
+redircmd(struct cmd *subcmd, char *file, char *efile, int mode, int fd){
   struct redircmd *cmd;
 
   cmd = malloc(sizeof(*cmd));
@@ -287,8 +290,7 @@ listcmd(struct cmd *left, struct cmd *right)
 }
 
 struct cmd*
-backcmd(struct cmd *subcmd)
-{
+backcmd(struct cmd *subcmd){
   struct backcmd *cmd;
 
   cmd = malloc(sizeof(*cmd));
@@ -304,8 +306,7 @@ char whitespace[] = " \t\r\n\v";
 char symbols[] = "<|>&;()";
 
 int
-gettoken(char **ps, char *es, char **q, char **eq)
-{
+gettoken(char **ps, char *es, char **q, char **eq){
   char *s;
   int ret;
   
