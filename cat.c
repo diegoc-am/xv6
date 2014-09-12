@@ -18,8 +18,7 @@ cat(int fd)
 }
 
 int
-main(int argc, char *argv[])
-{
+main(int argc, char *argv[]){
   int fd, i;
 
   if(argc <= 1){

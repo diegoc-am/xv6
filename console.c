@@ -124,11 +124,14 @@ panic(char *s)
 //PAGEBREAK: 50
 #define BACKSPACE 0x100
 #define CRTPORT 0x3d4
+#define KEYUP 0xe2
+#define KEYDOWN 0xe3
+#define KEYLEFT 0xe4
+#define KEYRIGHT 0xe5
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
 
 static void
-cgaputc(int c)
-{
+cgaputc(int c){
   int pos;
   
   // Cursor position: col + 80*row.
@@ -141,8 +144,11 @@ cgaputc(int c)
     pos += 80 - pos%80;
   else if(c == BACKSPACE){
     if(pos > 0) --pos;
-  } else
+  }
+  else{
     crt[pos++] = (c&0xff) | 0x0700;  // black on white
+  }
+    
   
   if((pos/80) >= 24){  // Scroll up.
     memmove(crt, crt+80, sizeof(crt[0])*23*80);
@@ -158,8 +164,7 @@ cgaputc(int c)
 }
 
 void
-consputc(int c)
-{
+consputc(int c){
   if(panicked){
     cli();
     for(;;)
@@ -185,8 +190,7 @@ struct {
 #define C(x)  ((x)-'@')  // Control-x
 
 void
-consoleintr(int (*getc)(void))
-{
+consoleintr(int (*getc)(void)){
   int c;
 
   acquire(&input.lock);
@@ -209,7 +213,13 @@ consoleintr(int (*getc)(void))
       }
       break;
     default:
-      if(c != 0 && input.e-input.r < INPUT_BUF){
+      if(c == KEYUP || c == KEYDOWN || c == KEYRIGHT || c == KEYLEFT){
+        if (c == KEYUP){
+
+        }
+        break;
+      }
+      else if(c != 0 && input.e-input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
         input.buf[input.e++ % INPUT_BUF] = c;
         consputc(c);
@@ -225,8 +235,7 @@ consoleintr(int (*getc)(void))
 }
 
 int
-consoleread(struct inode *ip, char *dst, int n)
-{
+consoleread(struct inode *ip, char *dst, int n){
   uint target;
   int c;
 
@@ -263,8 +272,7 @@ consoleread(struct inode *ip, char *dst, int n)
 }
 
 int
-consolewrite(struct inode *ip, char *buf, int n)
-{
+consolewrite(struct inode *ip, char *buf, int n){
   int i;
 
   iunlock(ip);
@@ -278,8 +286,7 @@ consolewrite(struct inode *ip, char *buf, int n)
 }
 
 void
-consoleinit(void)
-{
+consoleinit(void){
   initlock(&cons.lock, "console");
   initlock(&input.lock, "input");
 

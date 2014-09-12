@@ -214,7 +214,7 @@ endif
 QEMUOPTS = -hdb fs.img xv6.img -smp $(CPUS) -m 512 $(QEMUEXTRA)
 
 qemu: fs.img xv6.img
-	$(QEMU) $(QEMUOPTS) &
+	$(QEMU) -serial mon:stdio $(QEMUOPTS) &
 
 qemu-memfs: xv6memfs.img
 	$(QEMU) xv6memfs.img -smp $(CPUS)

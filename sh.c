@@ -350,8 +350,7 @@ gettoken(char **ps, char *es, char **q, char **eq){
 }
 
 int
-peek(char **ps, char *es, char *toks)
-{
+peek(char **ps, char *es, char *toks){
   char *s;
   
   s = *ps;
@@ -367,8 +366,7 @@ struct cmd *parseexec(char**, char*);
 struct cmd *nulterminate(struct cmd*);
 
 struct cmd*
-parsecmd(char *s)
-{
+parsecmd(char *s){
   char *es;
   struct cmd *cmd;
 
@@ -414,8 +412,7 @@ parsepipe(char **ps, char *es)
 }
 
 struct cmd*
-parseredirs(struct cmd *cmd, char **ps, char *es)
-{
+parseredirs(struct cmd *cmd, char **ps, char *es){
   int tok;
   char *q, *eq;
 
@@ -489,8 +486,7 @@ parseexec(char **ps, char *es)
 
 // NUL-terminate all the counted strings.
 struct cmd*
-nulterminate(struct cmd *cmd)
-{
+nulterminate(struct cmd *cmd){
   int i;
   struct backcmd *bcmd;
   struct execcmd *ecmd;
