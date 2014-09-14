@@ -189,8 +189,7 @@ struct {
 
 #define C(x)  ((x)-'@')  // Control-x
 
-void
-consoleintr(int (*getc)(void)){
+void consoleintr(int (*getc)(void)){
   int c;
 
   acquire(&input.lock);
@@ -216,6 +215,9 @@ consoleintr(int (*getc)(void)){
       if(c == KEYUP || c == KEYDOWN || c == KEYRIGHT || c == KEYLEFT){
         if (c == KEYUP){
 
+        }
+        else if (c == KEYDOWN){
+          
         }
         break;
       }

@@ -141,14 +141,17 @@ getcmd(char *buf, int nbuf)
   return 0;
 }
 
-int
-main(void){
+int main(void){
   static char buf[100];
   char path[256];
   path[0] = '/';
   int lastPos = 1;
   int fd;
+  int bash;
+  //Create file
+  bash = open(".bash_history",(int)"r");
   
+  close(bash);
   // Assumes three file descriptors open.
   while((fd = open("console", O_RDWR)) >= 0){
     if(fd >= 3){
@@ -158,7 +161,11 @@ main(void){
   }
   
   // Read and run input commands.
+  bash = open(".bash_history",(int)"ab+");
   while(getcmd(buf, sizeof(buf)) >= 0){
+      
+      write(bash, buf, strlen(buf));
+      
     if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
@@ -198,7 +205,7 @@ main(void){
       //Get the directory to print it now
       printf(2,"%s\n",path);
     }
-    if(fork1() == 0 && !(buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && (buf[3] == ' ' || buf[3]=='\n'))){
+    else if(fork1() == 0){
       if (buf[0] == '\n'){
         runcmd(parsecmd(buf));
       }
@@ -209,12 +216,14 @@ main(void){
         while(buf[i]!='\0'){
           p[i+1] = buf[i];
           i++;
-        }  
+        }
         runcmd(parsecmd(p));
       }
     }
+    
     wait();
   }
+  close(bash);
   exit();
 }
 
