@@ -13,6 +13,8 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
+#include "sh.h"
+
 
 static void consputc(int);
 
@@ -24,8 +26,7 @@ static struct {
 } cons;
 
 static void
-printint(int xx, int base, int sign)
-{
+printint(int xx, int base, int sign){
   static char digits[] = "0123456789abcdef";
   char buf[16];
   int i;
@@ -214,7 +215,7 @@ void consoleintr(int (*getc)(void)){
     default:
       if(c == KEYUP || c == KEYDOWN || c == KEYRIGHT || c == KEYLEFT){
         if (c == KEYUP){
-
+          
         }
         else if (c == KEYDOWN){
           
@@ -273,8 +274,7 @@ consoleread(struct inode *ip, char *dst, int n){
   return target - n;
 }
 
-int
-consolewrite(struct inode *ip, char *buf, int n){
+int consolewrite(struct inode *ip, char *buf, int n){
   int i;
 
   iunlock(ip);
@@ -287,8 +287,7 @@ consolewrite(struct inode *ip, char *buf, int n){
   return n;
 }
 
-void
-consoleinit(void){
+void consoleinit(void){
   initlock(&cons.lock, "console");
   initlock(&input.lock, "input");
 
@@ -299,4 +298,3 @@ consoleinit(void){
   picenable(IRQ_KBD);
   ioapicenable(IRQ_KBD, 0);
 }
-

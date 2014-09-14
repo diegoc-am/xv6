@@ -4,6 +4,7 @@
 #include "user.h"
 #include "fcntl.h"
 
+
 // Parsed command representation
 #define EXEC  1
 #define REDIR 2
@@ -130,28 +131,25 @@ runcmd(struct cmd *cmd){
 }
 
 
-int
-getcmd(char *buf, int nbuf)
-{
+int getcmd(char *buf, int nbuf){
   printf(2, "diegoC@xv6:~$ ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
-  if(buf[0] == 0) // EOF
+  if(buf[0] == 0){ // EOF
     return -1;
+  }
   return 0;
 }
 
 int main(void){
   static char buf[100];
+  
   char path[256];
   path[0] = '/';
   int lastPos = 1;
   int fd;
   int bash;
-  //Create file
-  bash = open(".bash_history",(int)"r");
   
-  close(bash);
   // Assumes three file descriptors open.
   while((fd = open("console", O_RDWR)) >= 0){
     if(fd >= 3){
@@ -160,12 +158,15 @@ int main(void){
     }
   }
   
-  // Read and run input commands.
+  //Create file if it's not there
   bash = open(".bash_history",(int)"ab+");
-  while(getcmd(buf, sizeof(buf)) >= 0){
-      
+  // Read and run input commands.
+  while(getcmd(buf, sizeof(buf)) >= 0){ 
+
+    if(buf[0]!='\n'){
       write(bash, buf, strlen(buf));
-      
+    }
+    
     if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
@@ -222,7 +223,7 @@ int main(void){
     }
     
     wait();
-  }
+  }  
   close(bash);
   exit();
 }
@@ -538,3 +539,5 @@ nulterminate(struct cmd *cmd){
   }
   return cmd;
 }
+
+
