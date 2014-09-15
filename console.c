@@ -13,7 +13,6 @@
 #include "mmu.h"
 #include "proc.h"
 #include "x86.h"
-#include "sh.h"
 
 
 static void consputc(int);
