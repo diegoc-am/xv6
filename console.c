@@ -15,9 +15,11 @@
 #include "x86.h"
 
 
+
 static void consputc(int);
 
 static int panicked = 0;
+
 
 static struct {
   struct spinlock lock;
@@ -103,8 +105,7 @@ cprintf(char *fmt, ...)
 }
 
 void
-panic(char *s)
-{
+panic(char *s){
   int i;
   uint pcs[10];
   
@@ -187,11 +188,17 @@ struct {
   uint e;  // Edit index
 } input;
 
+
+
 #define C(x)  ((x)-'@')  // Control-x
+
+char command[100][INPUT_BUF];
+int current = 0;
+int posicion = 0;
 
 void consoleintr(int (*getc)(void)){
   int c;
-
+  int first = 1;
   acquire(&input.lock);
   while((c = getc()) >= 0){
     switch(c){
@@ -212,23 +219,71 @@ void consoleintr(int (*getc)(void)){
       }
       break;
     default:
+
       if(c == KEYUP || c == KEYDOWN || c == KEYRIGHT || c == KEYLEFT){
         if (c == KEYUP){
           
+          //Code here to access above command
+          while(input.e != input.w){
+            input.e--;
+            consputc(BACKSPACE);
+          }
+
+          if(current > 0){
+            if (first){
+              current--;
+              first = 0;
+            }
+            int i;
+            for (i = 0; i < strlen(command[current]); i++){
+              consputc(command[current][i]);
+              input.buf[input.e++ % INPUT_BUF] = command[current][i];
+            }
+            current--;
+          }
         }
         else if (c == KEYDOWN){
-          
+          //Code here to access below command
+          while(input.e != input.w){
+            input.e--;
+            consputc(BACKSPACE);
+          }
+          if(current >= 0 && current < 100){
+            if (first){
+              first = 0;
+            }
+            int i;
+            for (i = 0; i < strlen(command[current]); i++){
+              consputc(command[current][i]);
+              input.buf[input.e++ % INPUT_BUF] = command[current][i];
+            }
+            current++; 
+          }
         }
         break;
       }
       else if(c != 0 && input.e-input.r < INPUT_BUF){
+        
         c = (c == '\r') ? '\n' : c;
+        if (c != '\n'){
+          command[current][posicion++ % INPUT_BUF] = c;
+        }
         input.buf[input.e++ % INPUT_BUF] = c;
         consputc(c);
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
           input.w = input.e;
+          command[current][posicion++ % INPUT_BUF] = 0; 
+          if (current == 100 || current < 0){
+            current = 0;
+          }
+          else if(posicion != 0) {
+            current++;
+          }
+          posicion = 0;
+          first =1;
           wakeup(&input.r);
         }
+      
       }
       break;
     }
@@ -236,11 +291,9 @@ void consoleintr(int (*getc)(void)){
   release(&input.lock);
 }
 
-int
-consoleread(struct inode *ip, char *dst, int n){
+int consoleread(struct inode *ip, char *dst, int n){
   uint target;
   int c;
-
   iunlock(ip);
   target = n;
   acquire(&input.lock);
