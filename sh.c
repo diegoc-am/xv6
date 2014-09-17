@@ -5,6 +5,7 @@
 #include "fcntl.h"
 
 
+
 // Parsed command representation
 #define EXEC  1
 #define REDIR 2
@@ -13,6 +14,7 @@
 #define BACK  5
 
 #define MAXARGS 10
+
 
 struct cmd {
   int type;
@@ -53,10 +55,12 @@ struct backcmd {
 int fork1(void);  // Fork but panics on failure.
 void panic(char*);
 struct cmd *parsecmd(char*);
+void getExecutedCmd();
+
+
 
 // Execute cmd.  Never returns.
-void
-runcmd(struct cmd *cmd){
+void runcmd(struct cmd *cmd){
   int p[2];
   struct backcmd *bcmd;
   struct execcmd *ecmd;
@@ -141,6 +145,7 @@ int getcmd(char *buf, int nbuf){
   return 0;
 }
 
+
 int main(void){
   static char buf[100];
   
@@ -149,7 +154,9 @@ int main(void){
   int lastPos = 1;
   int fd;
   int bash;
+
   
+
   // Assumes three file descriptors open.
   while((fd = open("console", O_RDWR)) >= 0){
     if(fd >= 3){
@@ -159,12 +166,15 @@ int main(void){
   }
   
   //Create file if it's not there
-  bash = open(".bash_history",(int)"ab+");
+  bash = open("/.bash_history",(int)"ab+");
   // Read and run input commands.
   while(getcmd(buf, sizeof(buf)) >= 0){ 
 
     if(buf[0]!='\n'){
       write(bash, buf, strlen(buf));
+      
+
+      
     }
     
     if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
@@ -205,6 +215,7 @@ int main(void){
     else if(buf[0] == 'p' && buf[1] == 'w' && buf[2] == 'd' && (buf[3] == ' ' || buf[3]=='\n')){
       //Get the directory to print it now
       printf(2,"%s\n",path);
+      
     }
     else if(fork1() == 0){
       if (buf[0] == '\n'){
@@ -235,10 +246,8 @@ panic(char *s){
 }
 
 int
-fork1(void)
-{
+fork1(void){
   int pid;
-  
   pid = fork();
   if(pid == -1)
     panic("fork");
@@ -286,9 +295,7 @@ pipecmd(struct cmd *left, struct cmd *right)
   return (struct cmd*)cmd;
 }
 
-struct cmd*
-listcmd(struct cmd *left, struct cmd *right)
-{
+struct cmd* listcmd(struct cmd *left, struct cmd *right){
   struct listcmd *cmd;
 
   cmd = malloc(sizeof(*cmd));
@@ -539,5 +546,6 @@ nulterminate(struct cmd *cmd){
   }
   return cmd;
 }
+
 
 
