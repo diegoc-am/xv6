@@ -174,7 +174,8 @@ consputc(int c){
 
   if(c == BACKSPACE){
     uartputc('\b'); uartputc(' '); uartputc('\b');
-  } else
+  } 
+  else
     uartputc(c);
   cgaputc(c);
 }
@@ -198,7 +199,7 @@ int posicion = 0;
 
 void consoleintr(int (*getc)(void)){
   int c;
-  int first = 1;
+  //short first = 1;
   acquire(&input.lock);
   while((c = getc()) >= 0){
     switch(c){
@@ -215,31 +216,38 @@ void consoleintr(int (*getc)(void)){
     case C('H'): case '\x7f':  // Backspace
       if(input.e != input.w){
         input.e--;
+        command[current][posicion--] = 0;
         consputc(BACKSPACE);
       }
       break;
     default:
-
       if(c == KEYUP || c == KEYDOWN || c == KEYRIGHT || c == KEYLEFT){
+        
         if (c == KEYUP){
-          
-          //Code here to access above command
+          //Delete current command
           while(input.e != input.w){
             input.e--;
             consputc(BACKSPACE);
           }
-
-          if(current > 0){
-            if (first){
+          //Code here to access above command
+          if(current > 0 && current <= 100){
+            current--;
+            int i;
+            for (i = 0; i < strlen(command[current]); i++){
+              consputc(command[current][i]);
+              input.buf[input.e++ % INPUT_BUF] = command[current][i];
+            }
+          }
+          else{
+            while (current > 0 && current <= 100 && strlen(command[current])==0){
               current--;
-              first = 0;
             }
             int i;
             for (i = 0; i < strlen(command[current]); i++){
               consputc(command[current][i]);
               input.buf[input.e++ % INPUT_BUF] = command[current][i];
             }
-            current--;
+            
           }
         }
         else if (c == KEYDOWN){
@@ -248,22 +256,29 @@ void consoleintr(int (*getc)(void)){
             input.e--;
             consputc(BACKSPACE);
           }
-          if(current >= 0 && current < 100){
-            if (first){
-              first = 0;
+          if (current >=0 && current < 100){
+            current++;
+            int i;
+            for (i = 0; i < strlen(command[current]); i++){
+              consputc(command[current][i]);
+              input.buf[input.e++ % INPUT_BUF] = command[current][i];
+            }
+          }
+          else{
+            while (current >= 0 && current < 100 && strlen(command[current])==0){
+              current++;
             }
             int i;
             for (i = 0; i < strlen(command[current]); i++){
               consputc(command[current][i]);
               input.buf[input.e++ % INPUT_BUF] = command[current][i];
             }
-            current++; 
           }
         }
+        //cprintf("%d", current);
         break;
       }
       else if(c != 0 && input.e-input.r < INPUT_BUF){
-        
         c = (c == '\r') ? '\n' : c;
         if (c != '\n'){
           command[current][posicion++ % INPUT_BUF] = c;
@@ -271,16 +286,17 @@ void consoleintr(int (*getc)(void)){
         input.buf[input.e++ % INPUT_BUF] = c;
         consputc(c);
         if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
-          input.w = input.e;
-          command[current][posicion++ % INPUT_BUF] = 0; 
-          if (current == 100 || current < 0){
+          if (current > 100 || current < 0){
             current = 0;
           }
-          else if(posicion != 0) {
+          if(input.w != input.e) {
+            command[current][posicion++] = 0;
             current++;
           }
+          input.w = input.e;
+          command[current][posicion++ % INPUT_BUF] = 0; 
           posicion = 0;
-          first =1;
+          //first =1;
           wakeup(&input.r);
         }
       
