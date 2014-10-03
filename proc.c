@@ -155,7 +155,6 @@ fork(void)
  
   pid = np->pid;
   np->state = RUNNABLE;
-  //pToKill = np;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
   return pid;
 }
