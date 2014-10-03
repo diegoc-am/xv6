@@ -213,6 +213,12 @@ void consoleintr(int (*getc)(void)){
         consputc(BACKSPACE);
       }
       break;
+    case C('C'):
+      killproc();
+      consputc('^');
+      consputc('C');
+      
+      break;
     case C('H'): case '\x7f':  // Backspace
       if(input.e != input.w){
         input.e--;
@@ -220,9 +226,9 @@ void consoleintr(int (*getc)(void)){
         consputc(BACKSPACE);
       }
       break;
+
     default:
       if(c == KEYUP || c == KEYDOWN || c == KEYRIGHT || c == KEYLEFT){
-        
         if (c == KEYUP){
           //Delete current command
           while(input.e != input.w){

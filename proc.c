@@ -15,6 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
+struct proc * pToKill;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -31,9 +32,7 @@ pinit(void)
 // If found, change state to EMBRYO and initialize
 // state required to run in the kernel.
 // Otherwise return 0.
-static struct proc*
-allocproc(void)
-{
+static struct proc* allocproc(void){
   struct proc *p;
   char *sp;
 
@@ -156,8 +155,13 @@ fork(void)
  
   pid = np->pid;
   np->state = RUNNABLE;
+  //pToKill = np;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
   return pid;
+}
+
+void killproc(void){
+    kill(pToKill->pid);
 }
 
 // Exit the current process.  Does not return.
@@ -401,9 +405,7 @@ wakeup(void *chan)
 // Kill the process with the given pid.
 // Process won't exit until it returns
 // to user space (see trap in trap.c).
-int
-kill(int pid)
-{
+int kill(int pid){
   struct proc *p;
 
   acquire(&ptable.lock);
