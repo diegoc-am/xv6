@@ -153,6 +153,7 @@ fork(void)
       np->ofile[i] = filedup(proc->ofile[i]);
   np->cwd = idup(proc->cwd);
  
+  pToKill = np;
   pid = np->pid;
   np->state = RUNNABLE;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
@@ -160,7 +161,12 @@ fork(void)
 }
 
 void killproc(void){
+  if(pToKill->state == RUNNING){
     kill(pToKill->pid);
+  }
+  
+  //cprintf("%d", pToKill->pid);
+  //exit();
 }
 
 // Exit the current process.  Does not return.
