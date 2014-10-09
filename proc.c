@@ -153,7 +153,7 @@ fork(void)
       np->ofile[i] = filedup(proc->ofile[i]);
   np->cwd = idup(proc->cwd);
  
-  pToKill = np;
+  
   pid = np->pid;
   np->state = RUNNABLE;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
@@ -286,6 +286,7 @@ scheduler(void)
       proc = p;
       switchuvm(p);
       p->state = RUNNING;
+      pToKill = p;
       swtch(&cpu->scheduler, proc->context);
       switchkvm();
 
