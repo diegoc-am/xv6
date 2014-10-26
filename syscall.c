@@ -101,6 +101,8 @@ extern int sys_shmem(void);
 extern int sys_shmctl(void);
 extern int sys_shmat(void);
 extern int sys_shdemat(void);
+extern int sys_killsignal(void);
+
 
 
 
@@ -132,6 +134,7 @@ static int (*syscalls[])(void) = {
 [SYS_shmctl]   sys_shmctl,
 [SYS_shmat]   sys_shmat,
 [SYS_shdemat]   sys_shdemat,
+[SYS_killsignal] sys_killsignal,
 };
 
 void

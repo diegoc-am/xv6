@@ -94,6 +94,12 @@ int sys_halt(void){
   return 0;
 }
 
+//run the signal function
+int sys_killsignal(void) {
+    return killsignal();
+}
+
+
 //Processes || Copy elements from the kernel ptable to the user space
 extern struct proc * getptable_proc(void);
 
@@ -126,3 +132,5 @@ int sys_getptable(void){
   } 
   return 0;
 }
+
+

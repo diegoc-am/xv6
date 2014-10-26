@@ -35,5 +35,6 @@ SYSCALL(shmem)
 SYSCALL(shmctl)
 SYSCALL(shmat)
 SYSCALL(shdemat)
+SYSCALL(killsignal)
 
 

@@ -28,7 +28,7 @@ int shmem(int);
 int shmctl(int);
 int shmat(int); 
 int shdemat(int);
-
+int killsignal(void);
 
 
 // ulib.c
