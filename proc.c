@@ -471,4 +471,15 @@ struct proc * getptable_proc(void){
   return ptable.proc;
 }
 
+int getppid(){
+  return proc->parent->pid;
+}
+
+int signal (int signum,sighandler_t * handler){
+  return 0;
+}
+
+int killsignal(int pid, int signum){
+  return 0;
+}
 

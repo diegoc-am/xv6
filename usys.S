@@ -31,3 +31,9 @@ SYSCALL(sleep)
 SYSCALL(uptime)
 SYSCALL(halt)
 SYSCALL(getptable)
+SYSCALL(shmem)
+SYSCALL(shmctl)
+SYSCALL(shmat)
+SYSCALL(shdemat)
+
+

@@ -66,6 +66,7 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  //Signals here
 };
 
 // Process memory is laid out contiguously, low addresses first:
@@ -73,3 +74,18 @@ struct proc {
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
+
+
+//Signals
+//void (func*)(void)
+//sig action(signum, funcion)
+//arr [signum] = funcion;
+/*
+kill signal (pid){
+  cp->funcion
+}
+
+
+sigproc
+get ppid()
+*/

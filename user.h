@@ -24,6 +24,12 @@ int sleep(int);
 int uptime(void);
 int halt(void);
 int getptable(int, void *);
+int shmem(int);
+int shmctl(int);
+int shmat(int); 
+int shdemat(int);
+
+
 
 // ulib.c
 int stat(char*, struct stat*);

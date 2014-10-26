@@ -22,3 +22,9 @@
 #define SYS_close  21
 #define SYS_halt   22
 #define SYS_getptable 23
+#define SYS_shmem  24
+#define SYS_shmctl 25
+#define SYS_shmat  26
+#define SYS_shdemat 27
+
+
