@@ -19,7 +19,9 @@ struct cpu {
 extern struct cpu cpus[NCPU];
 extern int ncpu;
 
-int killsignal(void);
+int getppid(void);
+int signal (int signum,sighandler_t * handler);
+int killsignal(int pid, int signum);
 
 // Per-CPU variables, holding pointers to the
 // current cpu and to the current process.
@@ -69,7 +71,7 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   //Signals here
-  int signals[4];
+  sighandler_t * signals[4];
 };
 
 // Process memory is laid out contiguously, low addresses first:

@@ -28,7 +28,11 @@ int shmem(int);
 int shmctl(int);
 int shmat(int); 
 int shdemat(int);
-int killsignal(void);
+int killsignal(int pid, int signum);
+int signal (int signum,sighandler_t * handler);
+int getppid();
+
+//int test_signal(void);
 
 
 // ulib.c

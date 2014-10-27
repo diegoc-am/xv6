@@ -36,5 +36,8 @@ SYSCALL(shmctl)
 SYSCALL(shmat)
 SYSCALL(shdemat)
 SYSCALL(killsignal)
+SYSCALL(getppid)
+SYSCALL(signal)
+
 
 

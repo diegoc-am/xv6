@@ -28,6 +28,7 @@ OBJS = \
 	vectors.o\
 	vm.o\
 	mem.o\
+#	test_signal.o\
 
 # Cross-compiling (e.g., on Mac OS X)
 #TOOLPREFIX = i386-jos-elf-
@@ -175,6 +176,8 @@ UPROGS=\
 	_halt\
 	_ps\
 	_shmemtest\
+	_testsignal\
+
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

@@ -27,5 +27,6 @@
 #define SYS_shmat  26
 #define SYS_shdemat 27
 #define SYS_killsignal 28
-
+#define SYS_getppid 29
+#define SYS_signal 30
 

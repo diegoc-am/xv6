@@ -476,12 +476,12 @@ int getppid(){
 }
 
 int signal (int signum,sighandler_t * handler){
-  return 0;
+  proc->signals[signum] = handler;
+  return 1;
 }
 
-int killsignal(){
-  int pid; 
-  int signum;
+
+int killsignal(int pid, int signum){
   struct proc *p;
   if(argint(0, &pid) < 0){
     return -1;

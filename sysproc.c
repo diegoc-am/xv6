@@ -95,10 +95,18 @@ int sys_halt(void){
 }
 
 //run the signal function
-int sys_killsignal(void) {
-    return killsignal();
+int sys_killsignal(int pid, int signum) {
+    return killsignal(pid, signum);
 }
 
+int sys_signal(int signum,sighandler_t * handler){
+  return signal(signum, handler);
+
+}
+
+int sys_getppid(void){
+  return getppid();
+}
 
 //Processes || Copy elements from the kernel ptable to the user space
 extern struct proc * getptable_proc(void);

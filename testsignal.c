@@ -1,6 +1,7 @@
 #include "types.h"
 #include "user.h"
 
+
 int value = 1;
 
 void sig_handled(void){
@@ -9,6 +10,11 @@ void sig_handled(void){
     value = 0;
     printf(1,"value = %d",value);
 
+}
+
+void sig2 (void){
+    printf(1,"YOLOSWAG\n");
+    value = 0;
 }
 
 int main(int argc, char *argv[]){
@@ -34,9 +40,9 @@ int main(int argc, char *argv[]){
             printf(1,"I am the child: %d\n", getpid());
             printf(1,"Waiting for a signal \n");
             //Setup the signal and wait for it
-            signal(1,sig_handled);
+            signal(signum,sig2);
             while(value){};
-            printf(1,"\nWhile completed\n");
+            printf(signum,"\nWhile completed\n");
             break;
 
         default://Parent
