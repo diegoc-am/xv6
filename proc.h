@@ -20,9 +20,11 @@ extern struct cpu cpus[NCPU];
 extern int ncpu;
 
 int getppid(void);
-int signal (int signum,sighandler_t * handler);
-int killsignal(int pid, int signum);
+//int signal (int signum,sighandler_t * handler);
+//int killsignal(int pid, int signum);
 
+int signal (void);
+int killsignal(void);
 // Per-CPU variables, holding pointers to the
 // current cpu and to the current process.
 // The asm suffix tells gcc to use "%gs:0" to refer to cpu

@@ -95,12 +95,38 @@ int sys_halt(void){
 }
 
 //run the signal function
-int sys_killsignal(int pid, int signum) {
-    return killsignal(pid, signum);
+/*int sys_killsignal(void) {
+    //int pid, int signum
+    //return killsignal(void);
+  int signum;
+  sighandler_t * handler;
+  if(argint(0,&signum)<0){
+    return -1;
+  }
+  if (argint(1,(int *)&handler) < 0){
+    return -1;
+  }
+  proc->signals[signum] = handler;
+  return 1;
 }
+*/
 
-int sys_signal(int signum,sighandler_t * handler){
-  return signal(signum, handler);
+int sys_signal(void){
+  //int signum;
+  //sighandler_t * handler;
+  //return signal(void);
+  int signum;
+  sighandler_t * handler;
+  if(argint(0,&signum)<0){
+    return -1;
+  }
+  if (argint(1,(int *)&handler) < 0){
+    return -1;
+  }
+  proc->signals[signum] = handler;
+  cprintf("%d en pos %d\n", handler, signum);
+  return 0;
+
 
 }
 
