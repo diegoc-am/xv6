@@ -1,5 +1,4 @@
 // Shell.
-
 #include "types.h"
 #include "user.h"
 #include "fcntl.h"
@@ -172,9 +171,6 @@ int main(void){
 
     if(buf[0]!='\n'){
       write(bash, buf, strlen(buf));
-      
-
-      
     }
     
     if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){

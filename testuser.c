@@ -2,7 +2,7 @@
 #include "stat.h"
 #include "user.h"
 #define MAXLEN 20
-
+//open("archivo", O_CREATE);
 
 int checkpasswd(int fd, char *user, char *passwd){
   int i, n, c,l;
