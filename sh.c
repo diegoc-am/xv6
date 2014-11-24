@@ -136,7 +136,7 @@ void runcmd(struct cmd *cmd){
 
 
 int getcmd(char *buf, int nbuf){
-  printf(2, "diegoC@xv6:~$ ");
+  printf(2, "diegoC@FailOS:~$ ");
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0){ // EOF

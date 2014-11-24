@@ -177,6 +177,11 @@ UPROGS=\
 	_ps\
 	_shmemtest\
 	_testsignal\
+	_login\
+	_exit\
+	_useradd\
+	_passwd\
+	_testuser\
 
 
 fs.img: mkfs README $(UPROGS)
