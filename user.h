@@ -32,9 +32,6 @@ int killsignal(int pid, int signum);
 int signal (int signum,sighandler_t * handler);
 int getppid();
 
-//int test_signal(void);
-
-
 // ulib.c
 int stat(char*, struct stat*);
 char* strcpy(char*, char*);

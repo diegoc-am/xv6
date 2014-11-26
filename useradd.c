@@ -22,13 +22,10 @@ int main(int argc, char *argv[]){
     printf(1,"Usage: Specify user and password, Ex.: useradd user password");
     exit();
   }
-  printf(1,"ARGS: %d", argc);
-  printf(1,"ARGS 1: %s", argv[1]);
-  printf(1,"ARGS 2: %s", newDir);
   while((n = read(fd, buf, sizeof(buf))) > 0){
-    printf(1,"iter");
+    //printf(1,"iter");
     for(i=0; i<n;) {
-      printf(1,"itersub: %d", i);
+      //printf(1,"itersub: %d", i);
       if(l == 0){ 
         while(i < n && buf[i] != ':' )iuser[c++] = buf[i++];
         if(i == n) break; 
@@ -43,13 +40,17 @@ int main(int argc, char *argv[]){
     }
     nUsers++;
   }
-  printf(1,"exists: %d\n", nUsers);
+  //printf(1,"exists: %d\n", nUsers);
   if(exists){
     printf(1,"User already exists");
     exit();
   }
+
+  strcpy(newDir + strlen(newDir), newUser);
+  printf(1,"%s\n", newDir);
+  mkdir(newDir);
   read(fd, buf, sizeof(buf));
-  printf(1,"fd: %d y n: %d\n", fd,  strlen(buf));
+  //printf(1,"fd: %d y n: %d\n", fd,  strlen(buf));
   write(fd, newUser,strlen(newUser));
   write(fd, ":",1);
   write(fd, tempPass, strlen(tempPass));

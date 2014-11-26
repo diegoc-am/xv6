@@ -3,6 +3,7 @@
 #include "stat.h"
 #include "fcntl.h"
 #define MAXLEN 30
+
 char *argv[] = { "sh", 0 };
 
 int checkpasswd(int fd, char *user, char *passwd){
@@ -12,8 +13,13 @@ int checkpasswd(int fd, char *user, char *passwd){
   char buf[1024];
   l = c = 0;
   //chop the \n
-  user[strlen(user)-1]  = 0;
-  passwd[strlen(passwd)-1]  = 0;
+  if(user[strlen(user)-1]  == '\n'){
+  	user[strlen(user)-1]  = 0;	
+  }
+  if(passwd[strlen(passwd)-1]  == '\n'){
+  	passwd[strlen(passwd)-1]  = 0;	
+  }
+
   while((n = read(fd, buf, sizeof(buf))) > 0){
     for(i=0; i<n;) {
       if(l == 0){	
@@ -30,9 +36,12 @@ int checkpasswd(int fd, char *user, char *passwd){
      //printf(1,"%s::%s\n", user,iuser);
      //printf(1,"%s::%s\n", passwd,ipasswd);
       if(!strcmp(user,iuser) && !strcmp(passwd,ipasswd)){
+      	char * dirToCreate = "/home/";
+      	strcpy(dirToCreate + strlen(dirToCreate), user);
+      	printf(1,"%s\n", dirToCreate);
+      	mkdir(dirToCreate);
       	return 1;
       }
-      	
       while(i <n && buf[i++] != '\n');
 
     }
@@ -40,16 +49,11 @@ int checkpasswd(int fd, char *user, char *passwd){
   return 0; 
 }
 
-int
-main(void)
-{
+int main(void){
+	int pid, wpid, fd;
 	int loggedIn = 1;
-	//int file = open("/.shadow", (int)"ab+");
-	//write(file, "diego:password:0:/home/diego", strlen("diego:password:0:/home/diego"));
-	//close(file);
 	mkdir("/home/");
 	while(loggedIn){
-		int pid, wpid, fd;
 		printf(1,"Username: ");
 		char * username = gets("username", MAXLEN);
 		printf(1,"Password: ");
@@ -58,7 +62,7 @@ main(void)
 		dup(0);  // stdout
 		dup(0);  // stderr
 		//printf(1, "init: starting sh\n");
-		if((fd = open("shadow", 0)) < 0){
+		if((fd = open("shadow", O_RDONLY)) < 0){
 		printf(1, "login: cannot open %s\n", argv[1]);
 			exit();
 		}

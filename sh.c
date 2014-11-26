@@ -3,8 +3,6 @@
 #include "user.h"
 #include "fcntl.h"
 
-
-
 // Parsed command representation
 #define EXEC  1
 #define REDIR 2
@@ -146,7 +144,7 @@ int getcmd(char *buf, int nbuf){
 }
 
 
-int main(void){
+int main(int argc, char * argv[]){
   static char buf[100];
   
   path[0] = '/';  
@@ -165,7 +163,7 @@ int main(void){
   }
   
   //Create file if it's not there
-  bash = open("/.bash_history",(int)"ab+");
+  bash = open("/.bash_history",O_CREATE | O_RDWR);
   // Read and run input commands.
   while(getcmd(buf, sizeof(buf)) >= 0){ 
 

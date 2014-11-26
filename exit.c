@@ -6,5 +6,5 @@
 int main(void){
 	kill(getppid());
 	exit();
-	return 0;	
+	return 0;
 }
