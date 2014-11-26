@@ -132,9 +132,9 @@ void runcmd(struct cmd *cmd){
 }
 
 char path[256];
-
+char * username;
 int getcmd(char *buf, int nbuf){
-  printf(2, "FailOS:%s~$",path);
+  printf(2, "%s@FailOS:%s~$ ",username,path);
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0){ // EOF
@@ -143,16 +143,22 @@ int getcmd(char *buf, int nbuf){
   return 0;
 }
 
-
 int main(int argc, char * argv[]){
+  username = argv[0];
+  char * dir = malloc(100);
+  //printf(1,"%s\n", username);
   static char buf[100];
-  
-  path[0] = '/';  
-  int lastPos = 1;
+  strcpy(dir , "/home/");
+  strcpy(dir + strlen(dir), username);
+  chdir(dir);
+  int i = 0;
+  for (i = 0; i < strlen(dir); i++){
+      path[i] = dir[i];
+  }
+  path[i] = '/';
+  int lastPos = i;
   int fd;
-  int bash;
-
-  
+  int bash;  
 
   // Assumes three file descriptors open.
   while((fd = open("console", O_RDWR)) >= 0){
@@ -170,8 +176,10 @@ int main(int argc, char * argv[]){
     if(buf[0]!='\n'){
       write(bash, buf, strlen(buf));
     }
-    
-    if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
+    if(buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't'){
+      exit();
+    }
+    else if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
       // Clumsy but will have to do for now.
       // Chdir has no effect on the parent if run in the child.
       buf[strlen(buf)-1] = 0;  // chop \n

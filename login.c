@@ -3,8 +3,7 @@
 #include "stat.h"
 #include "fcntl.h"
 #define MAXLEN 30
-
-char *argv[] = { "sh", 0 };
+char *argv[] = { "sh",  0};
 
 int checkpasswd(int fd, char *user, char *passwd){
   int i, n, c,l;
@@ -38,7 +37,7 @@ int checkpasswd(int fd, char *user, char *passwd){
       if(!strcmp(user,iuser) && !strcmp(passwd,ipasswd)){
       	char * dirToCreate = "/home/";
       	strcpy(dirToCreate + strlen(dirToCreate), user);
-      	printf(1,"%s\n", dirToCreate);
+      	//printf(1,"%s\n", dirToCreate);
       	mkdir(dirToCreate);
       	return 1;
       }
@@ -75,7 +74,8 @@ int main(void){
 			  exit();
 			}
 			if(pid == 0){
-			  exec("sh", argv);
+				char * uname[] = {username};
+			  exec("sh", uname);
 			  printf(1, "login: exec sh failed\n");
 			  exit();
 			}
@@ -88,6 +88,9 @@ int main(void){
 		  printf(1, "zombie!\n"); 
 			
 	}
-	return 0;
 	
+	wait();
+	exit();
+	//Unreachable line but I like to place it there
+	return 0;
 }
