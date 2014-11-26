@@ -178,7 +178,6 @@ UPROGS=\
 	_shmemtest\
 	_testsignal\
 	_login\
-	#_exit\
 	_useradd\
 	_passwd\
 	_testuser\
