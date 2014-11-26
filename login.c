@@ -44,10 +44,10 @@ int
 main(void)
 {
 	int loggedIn = 1;
+	//int file = open("/.shadow", (int)"ab+");
+	//write(file, "diego:password:0:/home/diego", strlen("diego:password:0:/home/diego"));
+	//close(file);
 	mkdir("/home/");
-	int file = open("/.shadow", O_CREATE | O_RDWR);
-	write(file, "diego:password:0:/home/diego", strlen("diego:password:0:/home/diego"));
-	close(file);
 	while(loggedIn){
 		int pid, wpid, fd;
 		printf(1,"Username: ");
@@ -58,7 +58,7 @@ main(void)
 		dup(0);  // stdout
 		dup(0);  // stderr
 		//printf(1, "init: starting sh\n");
-		if((fd = open("/.shadow", 0)) < 0){
+		if((fd = open("shadow", 0)) < 0){
 		printf(1, "login: cannot open %s\n", argv[1]);
 			exit();
 		}

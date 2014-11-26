@@ -133,9 +133,10 @@ void runcmd(struct cmd *cmd){
   exit();
 }
 
+char path[256];
 
 int getcmd(char *buf, int nbuf){
-  printf(2, "diegoC@FailOS:~$ ");
+  printf(2, "FailOS:%s~$",path);
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0){ // EOF
@@ -148,8 +149,7 @@ int getcmd(char *buf, int nbuf){
 int main(void){
   static char buf[100];
   
-  char path[256];
-  path[0] = '/';
+  path[0] = '/';  
   int lastPos = 1;
   int fd;
   int bash;
