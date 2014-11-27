@@ -23,7 +23,7 @@ int makeTempFile(char * username, char * npass){
       uname[postemp] = 0;
       //printf(1,"Comparando %s con %s\n", username, uname);
       if(!strcmp(username, uname)){
-        //printf(1,"Usuario Encontrado\n");
+        printf(1,"Changing %s's password\n", username);
         found=1;
       }
       if(found){
@@ -64,6 +64,10 @@ int makeTempFile(char * username, char * npass){
     }
     postemp++;
     pos++;
+  }
+  if(!found){
+    printf(1,"User %s not found\n", username);
+    exit();
   }
   postemp=0;
   while(buf[pos]!=0){
