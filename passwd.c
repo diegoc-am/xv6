@@ -7,9 +7,9 @@
 int makeTempFile(char * username, char * npass){
   char buf[1024], buftemp [1024], newuser[1024];
   int i;
-  int fd = open("shadow", O_RDONLY);
-  printf(1,"%s", username);
-  int tempFile = open("shadow_temp", O_CREATE | O_RDWR);
+  int fd = open("/shadow", O_RDONLY);
+  //printf(1,"%s", username);
+  int tempFile = open("/shadow_temp", O_CREATE | O_RDWR);
   read(fd, buf, sizeof(buf));
   //printf(1,"%s\n", buf);
   int pos = 0;
@@ -54,7 +54,7 @@ int makeTempFile(char * username, char * npass){
         write(tempFile, buftemp,strlen(buftemp));
       }
       postemp = -1;
-      printf(1,"%s", buftemp);
+      //printf(1,"%s", buftemp);
       for (i = 0; i < sizeof(buftemp); i++){
         buftemp[i] = 0;
       }
@@ -83,14 +83,14 @@ int makeTempFile(char * username, char * npass){
   if(found){    
     close(fd);
     close(tempFile);
-    unlink("shadow");
-    fd = open("shadow", O_CREATE | O_RDWR);
-    tempFile = open("shadow_temp", O_CREATE | O_RDWR);
+    unlink("/shadow");
+    fd = open("/shadow", O_CREATE | O_RDWR);
+    tempFile = open("/shadow_temp", O_CREATE | O_RDWR);
     read(tempFile, buftemp, sizeof(buftemp));    
     write(fd, buftemp, strlen(buftemp));
   }
   close(tempFile);
-  unlink("shadow_temp");
+  unlink("/shadow_temp");
   exit();
   return 0;
 }

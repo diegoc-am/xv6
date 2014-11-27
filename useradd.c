@@ -12,12 +12,12 @@ int main(int argc, char *argv[]){
 
   l = c = 0;
   int fd;
-  fd = open("shadow", O_RDWR);
+  fd = open("/shadow", O_RDWR);
   int exists = 0;
   int nUsers = 0;
-  char * newUser = argv[1];
+  char * newUsername = argv[1];
   char * tempPass = argv[2];
-  char * newDir = "/home/";
+  char * newHomeDirectory = "/home/";
   if(argc <= 2){
     printf(1,"Usage: Specify user and password, Ex.: useradd user password");
     exit();
@@ -46,28 +46,28 @@ int main(int argc, char *argv[]){
     exit();
   }
 
-  strcpy(newDir + strlen(newDir), newUser);
-  printf(1,"%s\n", newDir);
-  mkdir(newDir);
+  strcpy(newHomeDirectory + strlen(newHomeDirectory), newUsername);
+  //printf(1,"%s\n", newHomeDirectory);
+  mkdir(newHomeDirectory);
   read(fd, buf, sizeof(buf));
   //printf(1,"fd: %d y n: %d\n", fd,  strlen(buf));
-  write(fd, newUser,strlen(newUser));
+  write(fd, newUsername,strlen(newUsername));
   write(fd, ":",1);
   write(fd, tempPass, strlen(tempPass));
   write(fd, ":",1);
   
-  int numUsrFile = open("nusers", O_RDWR);
-  read(numUsrFile, bufUsers, sizeof(bufUsers));
+  int userNumber = open("/nusers", O_RDWR);
+  read(userNumber, bufUsers, sizeof(bufUsers));
   write(fd, bufUsers, sizeof(bufUsers)-1);
-  close(numUsrFile);
+  close(userNumber);
   
   write(fd, ":",1);  
-  write(fd, newDir, strlen(newDir));
-  write(fd, newUser,strlen(newUser));
+  write(fd, newHomeDirectory, strlen(newHomeDirectory));
+  write(fd, newUsername,strlen(newUsername));
   write(fd, "\n", 1);
   bufUsers[0]= bufUsers[0]+1;
-  numUsrFile = open("nusers", O_RDWR);
-  write(numUsrFile, bufUsers, sizeof(bufUsers));
+  userNumber = open("/nusers", O_RDWR);
+  write(userNumber, bufUsers, sizeof(bufUsers));
 
   close(fd);
   

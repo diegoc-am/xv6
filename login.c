@@ -61,7 +61,7 @@ int main(void){
 		dup(0);  // stdout
 		dup(0);  // stderr
 		//printf(1, "init: starting sh\n");
-		if((fd = open("shadow", O_RDONLY)) < 0){
+		if((fd = open("/shadow", O_RDONLY)) < 0){
 		printf(1, "login: cannot open %s\n", argv[1]);
 			exit();
 		}
