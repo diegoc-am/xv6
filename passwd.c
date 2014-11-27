@@ -96,8 +96,8 @@ int makeTempFile(char * username, char * npass){
 }
 
 int main(int argc, char *argv[]){
-  if (argc <= 1){
-    printf(1,"Usage: passwd username\n");
+  if (argc <= 2){
+    printf(1,"Usage: passwd username new_password\n");
     exit();
   }
   else{
